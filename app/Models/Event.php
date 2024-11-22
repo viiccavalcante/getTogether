@@ -18,4 +18,14 @@ class Event extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'event_id');
+    }
+
+    public function guests()
+    {
+        return $this->hasMany(Guest::class, 'event_id');
+    }
 }

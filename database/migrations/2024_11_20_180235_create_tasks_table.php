@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('description');
             $table->integer('status')->default(0);
             $table->decimal('expenses')->nullable();
-            $table->integer('event_id');
+            $table->foreignId('event_id');
         });
     }
 

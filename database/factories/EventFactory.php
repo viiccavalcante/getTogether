@@ -21,7 +21,7 @@ class EventFactory extends Factory
             'location' => fake()->sentence,
             'description' => fake()->realText(300),
             'event_date' => fake()->dateTime,
-           // 'created_by' => fake()->numberBetween(1,10),
+            'created_by' => fake()->numberBetween(1,4),
         ];
     }
 }

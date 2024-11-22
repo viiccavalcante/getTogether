@@ -18,8 +18,8 @@ class GuestFactory extends Factory
     {
         return [
             'can_edit' => fake()->boolean(),
-            //'event_id' => //fake()->numberBetween(1,10),
-            //'user_id' => //fake()->numberBetween(1,10),
+            'event_id' => fake()->numberBetween(1,3),
+            'user_id' =>  fake()->numberBetween(1,4),
         ];
     }
 }

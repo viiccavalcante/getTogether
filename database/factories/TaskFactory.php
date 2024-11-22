@@ -19,9 +19,9 @@ class TaskFactory extends Factory
         return [
             'name' => fake()->sentence,
             'description' => fake()->realText(180),
-            'status' => fake()->numberBetween(0,4),
-            'expenses' => fake()->randomFloat(2, 5, 100),
-           //'event_id' => //fake()->numberBetween(1,10),
+            'status' => fake()->numberBetween(0,3),
+            'expenses' => fake()->optional()->randomFloat(2, 5, 100),
+            'event_id' => fake()->numberBetween(1,3),
         ];
     }
 }

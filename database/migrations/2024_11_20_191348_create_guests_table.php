@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
 
-            $table->boolean('can_edit')->default(false);
-            $table->integer('user_id');
-            $table->integer('event_id');
+            $table->boolean('can_edit')->default(true);
+            $table->foreignId('user_id'); 
+            $table->foreignId('event_id');
         });
     }
 

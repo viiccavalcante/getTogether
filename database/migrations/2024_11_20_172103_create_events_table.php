@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('location');
             $table->text('description');
             $table->timestamp('event_date');
-            $table->integer('created_by');
+            $table->foreignId('created_by');
         });
     }
 
