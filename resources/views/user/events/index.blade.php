@@ -2,7 +2,7 @@
 
     <div class="flex justify-end mb-4">
         <a class="text-xs text-green-700 bg-purple-300 px-1 py-.5 rounded" href="">Active Events Only</a>
-        <a class="text-xs text-green-700 bg-green-300 px-1 py-.5 rounded" href="">Start an Event</a>
+        <a class="text-xs text-green-700 bg-green-300 px-1 py-.5 rounded" href="{{route('user.events.create')}}">Start an Event</a>
     </div>
 
 
