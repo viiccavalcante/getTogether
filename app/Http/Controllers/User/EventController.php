@@ -4,13 +4,16 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\Guest;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
     public function index()
     {
-        $events = Event::where('created_by', auth()->user()->id)->paginate(20);
+        $events = Event::where('created_by', auth()->user()->id)
+            ->orderByDesc('event_date')
+            ->paginate(20);
 
         return view('user.events.index', compact('events'));
     }
@@ -27,7 +30,7 @@ class EventController extends Controller
             'name' => ['required', 'string', 'min:5', 'max:255'],
             'location' => ['required', 'string', 'min:5', 'max:255'],
             'description' => ['required', 'string'],
-            'event_date' => ['required', 'date', 'after:today'],
+            'event_date' => ['required', 'date', 'after_or_equal:today'],
             'guests' => ['nullable', 'array'],
         ]);
 
@@ -39,7 +42,12 @@ class EventController extends Controller
             'created_by' => auth()->user()->id,
         ]);
 
-        $event->guests()->sync($request->guests);
+        foreach ($request->guests as $user_id) {
+            Guest::create([
+                'event_id' => $event->id,
+                'user_id' => $user_id,
+            ]);
+        }
 
         session()->flash('success', 'Event [<span class="font-bold">'.$event->name.'</span>] created successfully');
 

@@ -10,7 +10,11 @@
         <div class="bg-green-100 text-green-500 p-2">
             {!! session()->get('success') !!}
         </div>
-    @endif
+    @endif  
+
+    <div>
+        {{$events->links() }}
+    </div>
 
 
     <table class="table-auto w-full border border-gray-300">
@@ -23,7 +27,9 @@
         <tbody>
             @foreach($events as $event)
                 <tr class="hover:bg-gray-200 border-b border-gray-200">
-                    <td><a href="">{{$event->name}}</a></td>
+                    <td><a href="{{route('user.events.show', $event)}}">{{$event->name}}</a> 
+                    ({{$event->event_date->format('M-d-y')}})
+                </td>
                     <td class="flex gap-x-4 justify-center items-center">
                         <a href="{{route('user.events.show', $event)}}" class="text-xs text-blue-700 bg-blue-300 px-1 py-.5 rounded uppercase">Details</a>
                         <form action="{{route('user.events.destroy', $event)}}" method="post">

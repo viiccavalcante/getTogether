@@ -10,6 +10,8 @@ class Guest extends Model
     /** @use HasFactory<\Database\Factories\GuestFactory> */
     use HasFactory;
 
+    protected $guarded = [];
+
     public function event()
     {
         return $this->belongsTo(Event::class, 'event_id');
