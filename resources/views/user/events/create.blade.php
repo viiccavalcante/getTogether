@@ -1,12 +1,11 @@
 <x-site-layout title="Create new Event">
-
     <form action="{{route('user.events.store')}}" method="post" class="w-2/3 border border-gray-300 p-4">
         @csrf
 
         <x-form-text name="name" label="Name" placeholder="Name" />
         <x-form-text name="location" label="Where?" placeholder="Location" /> 
         <x-form-calendar name="event_date" label="When?" type="date" class="calendar-input" placeholder="Choose a date" />
-        <x-form-multi-select name="guests" label="Who is coming?" :options="\App\Models\User::pluck('name', 'id')->toArray()" />
+        <x-form-multi-select name="guests" label="Who is coming?" :options="$guests" />
         <x-form-textarea name="description" label="Describe it" placeholder="Describe your event"/>
 
         <div class="w-full flex justify-end gap-x-8">

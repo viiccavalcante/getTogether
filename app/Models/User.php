@@ -55,4 +55,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Guest::class, 'user_id');
     }
+
+    // Model scopes --------
+    public function scopeGetAllExcept($query, $event_creator_id)
+    {
+        return $query->select('id', 'name')
+                     ->where('id', '<>', $event_creator_id)
+                     ->orderBy('name', 'asc');
+    }
 }

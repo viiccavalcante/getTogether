@@ -1,5 +1,6 @@
 <x-site-layout title="{{$event->name}}">
     <a href="{{route('user.events.edit', $event)}}" class="text-xs text-blue-700 bg-blue-300 px-1 py-.5 rounded uppercase">edit</a>
+    <a href="{{route('user.events.index')}}" class="text-xs text-blue-700 bg-purple-300 px-1 py-.5 rounded uppercase">back</a>
     <div>Created by {{$event->creator->name}}</div>
     <div>Where? {{$event->location}}</div>
     <div>When? {{$event->event_date->format('M-d')}}</div>

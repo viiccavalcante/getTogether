@@ -15,6 +15,7 @@ class FormMultiSelect extends Component
         public string $name,
         public string $label,
         public array $options,
+        public ?array $selectedOptions = [],
         public ?array $values = [])
     {
         
