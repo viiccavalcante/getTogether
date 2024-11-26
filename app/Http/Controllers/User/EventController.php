@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Guest;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -12,8 +13,8 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::where('created_by', auth()->user()->id)
-            ->orderByDesc('event_date')
-            ->paginate(20);
+                         ->orderByDesc('event_date')
+                         ->paginate(20);
 
         return view('user.events.index', compact('events'));
     }
@@ -21,7 +22,12 @@ class EventController extends Controller
 
     public function create()
     {
-        return view('user.events.create');
+        $guests = User::getAllExcept(auth()->user()->id)
+                        ->get()
+                        ->pluck('name', 'id')
+                        ->toArray();
+        
+        return view('user.events.create', compact('guests'));
     }
 
     public function store(Request $request)
@@ -42,11 +48,8 @@ class EventController extends Controller
             'created_by' => auth()->user()->id,
         ]);
 
-        foreach ($request->guests as $user_id) {
-            Guest::create([
-                'event_id' => $event->id,
-                'user_id' => $user_id,
-            ]);
+        if($request->guests){
+            $this->SaveEventGuests($request->guests, $event->id);
         }
 
         session()->flash('success', 'Event [<span class="font-bold">'.$event->name.'</span>] created successfully');
@@ -67,9 +70,13 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($event_id);
 
-       // $this->isAuthorized($event);
+        $guests = User::getAllExcept(auth()->user()->id)
+                        ->get()
+                        ->pluck('name', 'id')
+                        ->toArray();
+        $selectedGuests = $event->guests->pluck('user.id')->toArray();
 
-        return view('user.events.edit', compact('event'));
+        return view('user.events.edit', compact('event', 'guests', 'selectedGuests'));
     }
 
     public function update(Request $request, int $event_id)
@@ -93,6 +100,15 @@ class EventController extends Controller
             'event_date' => $request->event_date,
         ]);
 
+        if($request->guests){
+            //condicao p ver se mudou meso e n fazer isos tudo atoa
+            $previousGuests = $event->guests->pluck('id');
+            Guest::whereIn('id', $previousGuests)->delete();
+            
+            $this->SaveEventGuests($request->guests, $event->id);
+        }
+        
+
         session()->flash('success', 'Event [<span class="font-bold">'.$event->name.'</span>] updated successfully');
 
         return redirect()->route('user.events.index');
@@ -113,11 +129,22 @@ class EventController extends Controller
 
     private function isAuthorized(Event $event, bool $creator_only): void
     {
-        // if($creator){
+         //if($creator_only){
 
         // }
         if ($event->created_by != auth()->user()->id) {
             abort(401);
         }
     }
+
+    private function SaveEventGuests(array $newGuests,int $eventId):void 
+    {
+        foreach ($newGuests as $userId) {
+            Guest::create([
+                'event_id' => $eventId,
+                'user_id' => $userId,
+            ]);
+        }
+    }
+
 }
