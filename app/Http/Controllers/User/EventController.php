@@ -102,9 +102,7 @@ class EventController extends Controller
 
         if($request->guests){
             //condicao p ver se mudou meso e n fazer isos tudo atoa
-            $previousGuests = $event->guests->pluck('id');
-            Guest::whereIn('id', $previousGuests)->delete();
-            
+            $this->DeleteEventGuests($event->guests->pluck('id'));
             $this->SaveEventGuests($request->guests, $event->id);
         }
         
@@ -119,7 +117,10 @@ class EventController extends Controller
         $event = Event::findOrFail($event_id);
 
        // $this->isCreator($event);
-
+        if($event->guests){
+            $this->DeleteEventGuests($event->guests->pluck('id'));
+        }
+    
         $event->delete();
 
         session()->flash('success', 'Event [<span class="font-bold">'.$event->name.'</span>] deleted successfully');
@@ -145,6 +146,11 @@ class EventController extends Controller
                 'user_id' => $userId,
             ]);
         }
+    }
+
+    private function DeleteEventGuests($previousGuests):void 
+    {
+        Guest::whereIn('id', $previousGuests)->delete();
     }
 
 }
