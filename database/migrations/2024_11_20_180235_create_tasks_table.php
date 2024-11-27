@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\TaskStatus;
 
 return new class extends Migration
 {
@@ -17,7 +18,7 @@ return new class extends Migration
 
             $table->string('name');
             $table->text('description');
-            $table->integer('status')->default(0);
+            $table->string('status')->default(TaskStatus::Created);
             $table->decimal('expenses')->nullable();
             $table->foreignId('event_id');
         });
