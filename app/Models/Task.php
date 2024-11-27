@@ -11,6 +11,8 @@ class Task extends Model
     /** @use HasFactory<\Database\Factories\TaskFactory> */
     use HasFactory;
 
+    protected $guarded = [];
+
     protected $casts = [
         'status' => TaskStatus::class,
     ];
