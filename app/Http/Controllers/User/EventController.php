@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Guest;
 use App\Models\User;
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -13,12 +14,14 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::where('created_by', auth()->user()->id)
-                         ->orderByDesc('event_date')
-                         ->paginate(20);
+                        ->orWhereHas('guests', function ($query) {
+                            $query->where('user_id', auth()->user()->id);
+                        })
+                        ->orderByDesc('event_date')
+                        ->paginate(20);
 
         return view('user.events.index', compact('events'));
     }
-
 
     public function create()
     {
@@ -60,15 +63,17 @@ class EventController extends Controller
     public function show(int $event_id)
     {
         $event = Event::findOrFail($event_id);
+        $event->authorized(auth()->user(), false);
 
-        //$this->isAuthorized($event);
-
+        //$tasks = Task::findOrFail($event_id);
+        
         return view('user.events.show', compact('event'));
     }
 
     public function edit(int $event_id)
     {
         $event = Event::findOrFail($event_id);
+        $event->authorized(auth()->user(), true);
 
         $guests = User::getAllExcept(auth()->user()->id)
                         ->get()
@@ -90,8 +95,7 @@ class EventController extends Controller
         ]);
 
         $event = Event::find($event_id);
-
-        //$this->isAuthorized($event);
+        $event->authorized(auth()->user(), true);
 
         $event->update([
             'name' => $request->name,
@@ -115,8 +119,8 @@ class EventController extends Controller
     public function destroy(int $event_id)
     {
         $event = Event::findOrFail($event_id);
+        $event->authorized(auth()->user(), true);
 
-       // $this->isCreator($event);
         if($event->guests){
             $this->DeleteEventGuests($event->guests->pluck('id'));
         }
@@ -126,16 +130,6 @@ class EventController extends Controller
         session()->flash('success', 'Event [<span class="font-bold">'.$event->name.'</span>] deleted successfully');
 
         return redirect()->route('user.events.index');
-    }
-
-    private function isAuthorized(Event $event, bool $creator_only): void
-    {
-         //if($creator_only){
-
-        // }
-        if ($event->created_by != auth()->user()->id) {
-            abort(401);
-        }
     }
 
     private function SaveEventGuests(array $newGuests,int $eventId):void 

@@ -30,4 +30,17 @@ class Event extends Model
     {
         return $this->hasMany(Guest::class, 'event_id');
     }
+
+    public function authorized(User $user, bool $creatorOnly): void
+    {
+        if ($this->created_by == $user->id) {
+            return;
+        }
+
+        if(!$creatorOnly && (in_array($user->id, $this->guests()->pluck('user_id')->toArray()))) {
+            return;
+        }
+
+        abort(401);
+    }
 }
