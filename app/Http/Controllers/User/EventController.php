@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Guest;
 use App\Models\User;
-use App\Models\Task;
 use Illuminate\Http\Request;
 
 class EventController extends Controller

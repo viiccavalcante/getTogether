@@ -13,7 +13,7 @@ class TaskController extends Controller
     public function create(int $id, Request $request)
     {
         $event = \App\Models\Event::findOrFail($id);
-        $event->load('guests', 'creator');
+        $event->load('guests');
         $event->authorized(auth()->user(), false);
 
         $eventGuests = User::getAllFromGuests($event->id)->get()->pluck('name', 'id')->toArray();

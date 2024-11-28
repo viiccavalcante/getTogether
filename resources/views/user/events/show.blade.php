@@ -70,7 +70,7 @@
                             </div>
                           
                                 @if ($task->status!== TaskStatus::Done)
-                                <a href="{{ route('user.events.edit', $event) }}" class="text-xs text-white bg-[#FB923C] hover:bg-[#FF7F2A] px-3 py-1 rounded-lg uppercase font-semibold transition-colors">
+                                <a href="{{ route('user.events.tasks.complete', $task) }}" class="text-xs text-white bg-[#FB923C] hover:bg-[#FF7F2A] px-3 py-1 rounded-lg uppercase font-semibold transition-colors">
                                     Mark as Done
                                 </a>
                                 @endif
