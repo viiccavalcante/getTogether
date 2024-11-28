@@ -14,10 +14,11 @@ class EventController extends Controller
     public function index()
     {
         $events = Event::where('created_by', auth()->user()->id)
+                        ->where('event_date', '>=', today())
                         ->orWhereHas('guests', function ($query) {
                             $query->where('user_id', auth()->user()->id);
                         })
-                        ->orderByDesc('event_date')
+                        ->orderBy('event_date', 'asc')
                         ->paginate(10);
 
         return view('user.events.index', compact('events'));

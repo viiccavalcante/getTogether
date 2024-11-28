@@ -20,8 +20,8 @@ class EventFactory extends Factory
             'name' => fake()->sentence,
             'location' => fake()->sentence,
             'description' => fake()->realText(300),
-            'event_date' => fake()->dateTime,
-            'created_by' => fake()->numberBetween(1,4),
+            'event_date' => fake()->dateTimeBetween('now', '+6 months'),
+            'created_by' => fake()->numberBetween(1,5),
         ];
     }
 }

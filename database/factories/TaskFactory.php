@@ -22,7 +22,7 @@ class TaskFactory extends Factory
             'description' => fake()->realText(180),
             'status' => fake()->randomElement(array_column(TaskStatus::cases(), 'value')),
             'expenses' => fake()->optional()->randomFloat(2, 5, 100),
-            'event_id' => fake()->numberBetween(1,3),
+            'event_id' => fake()->numberBetween(1, 12),
         ];
     }
 }

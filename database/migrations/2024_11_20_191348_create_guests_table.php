@@ -18,6 +18,8 @@ return new class extends Migration
             $table->boolean('can_edit')->default(true);
             $table->foreignId('user_id'); 
             $table->foreignId('event_id');
+
+            $table->unique(['user_id', 'event_id']);
         });
     }
 

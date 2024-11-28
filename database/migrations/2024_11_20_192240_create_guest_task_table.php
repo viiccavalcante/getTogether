@@ -16,6 +16,8 @@ return new class extends Migration
 
             $table->foreignId('guest_id');
             $table->foreignId('task_id');
+
+            $table->unique(['guest_id', 'task_id']);
         });
     }
 
