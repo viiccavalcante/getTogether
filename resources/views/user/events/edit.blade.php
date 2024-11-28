@@ -9,12 +9,8 @@
         <x-form-multi-select name="guests" label="Who is coming?" :options="$guests" :selectedOptions="$selectedGuests"/>
         <x-form-textarea name="description" label="Describe it" placeholder="Describe your event" value="{{$event->description}}"/>
         <div class="w-full flex justify-end gap-x-8">
-            <a href="{{route('user.events.show', $event)}}" class="text-xs font-semibold text-gray-600 bg-gray-300 hover:bg-gray-500 px-4 py-2 rounded-full uppercase">
-                Undo
-            </a>
-            <button type="submit" class="text-sm font-bold text-white bg-[#8e4b71] hover:bg-[#502d55] focus:outline-none py-2 px-6 rounded-full shadow-md transition-all uppercase">
-                Edit Event
-            </button>
+            <x-form-undo-hiperlink :href="route('user.events.show', $event)"></x-form-undo-hiperlink>
+            <x-form-submit-button label="Edit Event"></x-form-submit-button>
         </div>
     </form>
 </x-site-layout>

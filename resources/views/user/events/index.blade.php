@@ -1,6 +1,6 @@
 <x-site-layout title="My Events">
-    <div class="flex justify-start mb-4">
-        <a class="text-sm font-bold text-white bg-[#8e4b71] hover:bg-[#502d55] focus:outline-none py-2 px-6 rounded-full shadow-md transition-all uppercase" href="{{route('user.events.create')}}">Create Event</a>
+    <div class="flex justify-start mb-5">
+        <x-primary-hiperlink :href="route('user.events.create')" action="Create Event"/>
     </div>
 
     @if(session()->has('success'))
@@ -28,16 +28,13 @@
         
             <div class="flex items-center justify-between">
                 <a href="{{route('user.events.show', $event)}}" 
-                class="text-sm text-white bg-[#8e4b71] hover:bg-[#502d55] px-2 py-0.5 rounded-full font-semibold transition-colors uppercase">
+                class="text-sm text-white bg-[#8e4b71] hover:bg-[#502d55] px-2 py-0.5 rounded-md font-semibold transition-colors uppercase">
                     Details
                 </a>
                 <form action="{{route('user.events.destroy', $event)}}" method="post" class="inline-block">
                     @method('delete')
                     @csrf
-                    <button type="submit" 
-                            class="text-sm text-orange-50 bg-orange-400 hover:bg-orange-600 px-2 py-0.5 rounded-full font-semibold transition-colors uppercase">
-                        Delete
-                    </button>
+                    <x-delete-button></x-delete-button>
                 </form>
             </div>
         </div>
