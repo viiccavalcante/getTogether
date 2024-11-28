@@ -18,7 +18,7 @@ class EventController extends Controller
                             $query->where('user_id', auth()->user()->id);
                         })
                         ->orderByDesc('event_date')
-                        ->paginate(20);
+                        ->paginate(10);
 
         return view('user.events.index', compact('events'));
     }
@@ -60,9 +60,9 @@ class EventController extends Controller
         return redirect()->route('user.events.index');
     }
 
-    public function show(int $event_id)
+    public function show(int $eventId)
     {
-        $event = Event::findOrFail($event_id);
+        $event = Event::findOrFail($eventId);
         $event->authorized(auth()->user(), false);
 
         //$tasks = Task::findOrFail($event_id);
@@ -70,9 +70,9 @@ class EventController extends Controller
         return view('user.events.show', compact('event'));
     }
 
-    public function edit(int $event_id)
+    public function edit(int $eventId)
     {
-        $event = Event::findOrFail($event_id);
+        $event = Event::findOrFail($eventId);
         $event->authorized(auth()->user(), true);
 
         $guests = User::getAllExcept(auth()->user()->id)
@@ -84,7 +84,7 @@ class EventController extends Controller
         return view('user.events.edit', compact('event', 'guests', 'selectedGuests'));
     }
 
-    public function update(Request $request, int $event_id)
+    public function update(Request $request, int $eventId)
     {
         $request->validate([
             'name' => ['required', 'string', 'min:5', 'max:255'],
@@ -94,7 +94,7 @@ class EventController extends Controller
             'guests' => ['nullable', 'array'],
         ]);
 
-        $event = Event::find($event_id);
+        $event = Event::find($eventId);
         $event->authorized(auth()->user(), true);
 
         $event->update([
@@ -116,15 +116,16 @@ class EventController extends Controller
         return redirect()->route('user.events.index');
     }
 
-    public function destroy(int $event_id)
+    public function destroy(int $eventId)
     {
-        $event = Event::findOrFail($event_id);
+        $event = Event::findOrFail($eventId);
         $event->authorized(auth()->user(), true);
 
         if($event->guests){
             $this->DeleteEventGuests($event->guests->pluck('id'));
         }
-    
+
+        $event->tasks()->delete();//achoq ue precisa deletar da tabela de task tb
         $event->delete();
 
         session()->flash('success', 'Event [<span class="font-bold">'.$event->name.'</span>] deleted successfully');

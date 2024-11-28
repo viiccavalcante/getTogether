@@ -10,19 +10,6 @@ use App\Enums\TaskStatus;
 
 class TaskController extends Controller
 {
-   
-    public function index()
-    {
-        $tasks = Task::where('created_by', auth()->user()->id)
-        ->orWhereHas('guests', function ($query) {
-            $query->where('user_id', auth()->user()->id);
-        })
-        ->orderByDesc('event_date')
-        ->paginate(20);
-
-        return view('user.events.tasks.index', compact('events'));
-    }
-
     public function create(int $id, Request $request)
     {
         $event = \App\Models\Event::findOrFail($id);
@@ -40,9 +27,8 @@ class TaskController extends Controller
 
         $request->validate([
             'name' => ['required', 'string', 'min:5', 'max:255'],
-            'description' => ['required', 'string', 'max:500'],
-            'expenses' => ['nullable'], //validar
-            'guests' => ['nullable', 'array'],
+            'description' => ['required', 'string', 'max:300'],
+            'expenses' => ['nullable', 'numeric', 'min:0.01'], 
         ]);
 
         $task = Task::create([
@@ -60,8 +46,19 @@ class TaskController extends Controller
         return redirect()->route('user.events.show', compact('event'));
     }
 
-    public function destroy(string $id)
+    public function destroy(string $taskId)
     {
-        //
+        $task = Task::findOrFail($taskId);
+        $task->load('guests', 'event');
+        //$event->authorized(auth()->user(), true);
+
+        if($task->guests){
+            $this->DeleteEventGuests($event->guests->pluck('id'));
+        }
+
+        $task->delete();
+        session()->flash('success', 'Event [<span class="font-bold">'.$task->name.'</span>] deleted successfully');
+
+        return redirect()->route('user.events.show', compact('task->event'));
     }
 }
