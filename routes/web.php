@@ -16,6 +16,7 @@ Route::name('user.')->middleware(['auth', 'verified'])->group(function () {
     Route::resource('user/events', App\Http\Controllers\User\EventController::class);
     Route::get('user/events/{id}/tasks', [App\Http\Controllers\User\TaskController::class,'create'])->name('events.tasks.create');
     Route::post('user/events/{id}/tasks', [App\Http\Controllers\User\TaskController::class,'store'])->name('events.tasks.store');
+    Route::delete('user/events/{id}/tasks', [App\Http\Controllers\User\TaskController::class,'destroy'])->name('events.tasks.destroy');
 });
 
 

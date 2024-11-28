@@ -14,16 +14,16 @@ class TaskController extends Controller
     {
         $event = \App\Models\Event::findOrFail($id);
         $event->load('guests', 'creator');
+        $event->authorized(auth()->user(), false);
 
-        $eventGuests = User::getAllFromGuests($event->id)->get();
-        $allEventUsers = $eventGuests->push($event->creator)->pluck('name', 'id')->toArray();
-
-        return view('user.events.tasks.create', compact('event', 'allEventUsers'));
+        $eventGuests = User::getAllFromGuests($event->id)->get()->pluck('name', 'id')->toArray();
+        return view('user.events.tasks.create', compact('event', 'eventGuests'));
     }
     
-    public function store(int $id, Request $request,)
+    public function store(int $id, Request $request)
     {
         $event = \App\Models\Event::findOrFail($id);
+        $event->authorized(auth()->user(), false);
 
         $request->validate([
             'name' => ['required', 'string', 'min:5', 'max:255'],
@@ -34,13 +34,13 @@ class TaskController extends Controller
         $task = Task::create([
             'name' => $request->name,
             'description' => $request->description,
-            'status' => TaskStatus::Assigned,
+            'status' => ($request->guests) ? TaskStatus::Assigned : TaskStatus::Created,
             'expenses' => $request->expenses,
             'event_id' => $event->id,
         ]);
 
         $task->guests()->attach($request->guests);
-
+        
         session()->flash('success', 'Task [<span class="font-bold">'.$event->name.'</span>] created successfully');
 
         return redirect()->route('user.events.show', compact('event'));
@@ -50,15 +50,16 @@ class TaskController extends Controller
     {
         $task = Task::findOrFail($taskId);
         $task->load('guests', 'event');
-        //$event->authorized(auth()->user(), true);
+        $event = $task->event;
+        $event->authorized(auth()->user(), false);
 
         if($task->guests){
-            $this->DeleteEventGuests($event->guests->pluck('id'));
+            $task->guests()->detach();
         }
 
         $task->delete();
         session()->flash('success', 'Event [<span class="font-bold">'.$task->name.'</span>] deleted successfully');
 
-        return redirect()->route('user.events.show', compact('task->event'));
+        return redirect()->route('user.events.show', compact('event'));
     }
 }

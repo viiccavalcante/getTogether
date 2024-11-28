@@ -1,3 +1,7 @@
+@php
+    use App\Enums\TaskStatus;
+@endphp
+
 <x-site-layout title="Event Detail">
     <div class="rounded-lg border border-gray-200 bg-white shadow-lg p-6 transition-shadow hover:shadow-xl">
         <div class="flex items-center justify-between space-x-4">
@@ -24,7 +28,7 @@
         </div>
 
         <div class="font-medium text-gray-800 mt-4">
-            <span class="font-semibold text-lg text-gray-900">Guests</span>
+            <span class="font-semibold text-lg text-gray-900">Participants</span>
             <div class="flex flex-wrap gap-2 mt-2">
                 @foreach($event->guests as $guest)
                     <div class="inline-flex items-center space-x-2 text-gray-700 bg-[#c598af] hover:bg-purple-200 text-white px-3 py-1 rounded-full cursor-pointer transition-all">
@@ -40,24 +44,38 @@
                 <div class="space-y-4">
                     @foreach($event->tasks as $task)
                         <div class="bg-white hover:bg-gray-50 p-4 rounded-lg shadow-md border border-gray-200 transition-colors">
-                            <div class="flex justify-between items-center">
-                                <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <div class="flex-1">
+                                <div class= "flex items-center space-x-4 max-w-4xl">
                                     <span class="font-semibold text-lg text-gray-800">{{ $task->name }}</span>
-                                    <p class="font-normal max-w-3xl text-sm text-gray-600">{{ $task->description }}</p>
+                                    <div>
+                                        @foreach($task->guests as $guestAssigned)
+                                            <div class="inline-flex items-center space-x-1 text-[#381841] bg-purple-200 text-sm px-2 py-0.5 rounded-full transition-all">
+                                                <span>{{ $guestAssigned->user->name }}</span>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
-                                <x-show-task-status status="{{$task->status->name}}"></x-show-task-status>
+                                <p class="font-normal max-w-3xl text-sm text-gray-600">{{ $task->description }}</p>
+                            </div>
+                            <x-show-task-status status="{{$task->status->name}}"></x-show-task-status>
                             </div>
                             <div class="mt-2 flex justify-between items-center">
                                 <span class="text-sm text-gray-500">{{ $task->expenses ? 'R$' . number_format($task->expenses, 2, ',', '.') : 'No Cost' }}</span>
-                                <form action="{{route('user.events.destroy', $event)}}" method="post" class="inline-block">
+                                <form action="{{route('user.events.tasks.destroy', $task)}}" method="post" class="inline-block">
                                     @method('delete')
                                     @csrf
                                     <x-delete-button></x-delete-button>
                                 </form>
                             </div>
-                            <a href="{{ route('user.events.edit', $event) }}" class="text-xs text-white bg-[#FB923C] hover:bg-[#FF7F2A] px-3 py-1 rounded-lg uppercase font-semibold transition-colors">
-                                Mark as Done
-                            </a>
+                          
+                                @if ($task->status!== TaskStatus::Done)
+                                <a href="{{ route('user.events.edit', $event) }}" class="text-xs text-white bg-[#FB923C] hover:bg-[#FF7F2A] px-3 py-1 rounded-lg uppercase font-semibold transition-colors">
+                                    Mark as Done
+                                </a>
+                                @endif
+                                
+                            
                         </div>
                     @endforeach
                 </div>

@@ -39,7 +39,7 @@ class EventController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'min:5', 'max:255'],
             'location' => ['required', 'string', 'min:5', 'max:255'],
-            'description' => ['required', 'string'],
+            'description' => ['required', 'string', 'max:500'],
             'event_date' => ['required', 'date', 'after_or_equal:today'],
             'guests' => ['nullable', 'array'],
         ]);
@@ -53,7 +53,7 @@ class EventController extends Controller
         ]);
 
         if($request->guests){
-            $this->SaveEventGuests($request->guests, $event->id);
+            $this->SaveEventGuests($request->guests, $event->id, auth()->user()->id);
         }
 
         session()->flash('success', 'Event [<span class="font-bold">'.$event->name.'</span>] created successfully');
@@ -90,8 +90,8 @@ class EventController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'min:5', 'max:255'],
             'location' => ['required', 'string', 'min:5', 'max:255'],
-            'description' => ['required', 'string'],
-            'event_date' => ['required', 'date', 'after:today'],
+            'description' => ['required', 'string', 'max:500'],
+            'event_date' => ['required', 'date', 'after_or_equal:today'],
             'guests' => ['nullable', 'array'],
         ]);
 
@@ -108,7 +108,7 @@ class EventController extends Controller
         if($request->guests){
             //condicao p ver se mudou meso e n fazer isos tudo atoa
             $this->DeleteEventGuests($event->guests->pluck('id'));
-            $this->SaveEventGuests($request->guests, $event->id);
+            $this->SaveEventGuests($request->guests, $event->id, $event->created_by);
         }
         
 
@@ -134,8 +134,9 @@ class EventController extends Controller
         return redirect()->route('user.events.index');
     }
 
-    private function SaveEventGuests(array $newGuests,int $eventId):void 
+    private function SaveEventGuests(array $newGuests,int $eventId, string $creator_id):void 
     {
+        array_push($newGuests, $creator_id);
         foreach ($newGuests as $userId) {
             Guest::create([
                 'event_id' => $eventId,

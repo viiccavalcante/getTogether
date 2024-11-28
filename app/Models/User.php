@@ -67,7 +67,7 @@ class User extends Authenticatable
        // Model scopes --------
     public function scopeGetAllFromGuests($query, $eventId)
     {
-        return $query->select('users.id', 'users.name')
+        return $query->select('guests.id', 'users.name')
                      ->join('guests', 'users.id', '=', 'guests.user_id')
                      ->where('guests.event_id', $eventId)
                      ->orderBy('name', 'asc');
