@@ -18,7 +18,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                     <h3 class="text-xl font-bold text-[#381841]">{{$event->name}}</h3>
-                    <h3 class="text-xl font-bold text-orange-300"> ({{$event->event_date->format('M-d-y')}})</h3>
+                    <h3 class="text-xl font-bold text-orange-400"> ({{$event->event_date->format('M-d-y')}})</h3>
                 </div>
                 <span class="text-sm text-gray-500">(Participants: {{$event->guests->count() + 1}})</span> <!--ta errada essa conta -->
             </div>

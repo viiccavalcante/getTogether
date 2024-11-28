@@ -1,17 +1,18 @@
 <x-site-layout title="Event Detail">
     <div class="rounded-lg border border-gray-200 bg-white shadow-lg p-6 transition-shadow hover:shadow-xl">
-        <div class="flex items-center space-x-4 justify-between">
-            <div class="flex items-center space-x-4">
-                <h3 class="font-bold text-2xl text-[#381841]">{{ $event->name }}</h3>
-                <h1 class="font-bold text-xl text-orange-500">({{ $event->event_date->format('M-d-y') }})</h1>
-            </div>
-            <div class="flex space-x-4 ml-auto">
-            <x-primary-hiperlink  href="{{route('user.events.tasks.create', $event)}}" action="Create Task"/>
-                <a href="{{ route('user.events.edit', $event) }}" class="text-xs text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg uppercase font-semibold transition-colors">
-                    Edit
-                </a>
-            </div>
-        </div>
+    <div class="flex items-center justify-between space-x-4">
+    <div class="flex items-center space-x-4">
+        <h3 class="font-bold text-2xl text-[#381841]">{{ $event->name }}</h3>
+        <h1 class="font-bold text-xl text-orange-500">({{ $event->event_date->format('M-d-y') }})</h1>
+    </div>
+    <div class="flex space-x-4">
+        <a class="text-sm font-bold text-white bg-[#FB923C] hover:bg-[#FB923C] focus:outline-none py-2 px-6 rounded-md shadow-md transition-all uppercase" href="{{ route('user.events.tasks.create', $event) }}">
+            Create Task
+        </a>
+        <x-primary-hiperlink href="{{ route('user.events.edit', $event) }}" action="Edit Event"/>
+    </div>
+</div>
+
 
         <div class="text-m text-gray-500 mb-1 ">
             Created by:</span> {{$event->creator->name}}
@@ -45,7 +46,7 @@
                     <span class="font-semibold text-lg text-gray-800">{{ $task->name }}</span>
                     <p class="font-normal text-sm text-gray-600">{{ $task->description }}</p>
                 </div>
-                <span class="text-sm font-medium text-gray-500">{{ $task->status }}</span>
+                <x-show-task-status status="{{$task->status->name}}"></x-show-task-status>
             </div>
             <div class="mt-2 flex justify-between items-center">
                 <span class="text-sm text-gray-500">{{ $task->expenses ? 'R$' . number_format($task->expenses, 2, ',', '.') : 'No Cost' }}</span>
@@ -56,7 +57,7 @@
                 </form>
             </div>
             <a href="{{ route('user.events.edit', $event) }}" 
-                    class="text-xs text-white bg-green-500 hover:bg-green-600 px-3 py-1 rounded-lg uppercase font-semibold transition-colors">
+                    class="text-xs text-white bg-[#FB923C] hover:bg-[#FF7F2A] px-3 py-1 rounded-lg uppercase font-semibold transition-colors">
                     Mark as Done
                 </a>
         </div>
