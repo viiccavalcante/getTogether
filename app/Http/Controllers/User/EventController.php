@@ -105,7 +105,6 @@ class EventController extends Controller
         ]);
 
         if($request->guests){
-            //condicao p ver se mudou meso e n fazer isos tudo atoa
             $this->DeleteEventGuests($event->guests->pluck('id'));
             $this->SaveEventGuests($request->guests, $event->id, $event->created_by);
         }

@@ -17,21 +17,35 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
+       
         User::factory()->create([
             'name' => 'Victoria Cavalcante',
             'email' => 'vic@xx.com',
-            'password' => 'lalala',
+            'password' => bcrypt('lalala'), 
         ]);
 
         User::factory(10)->create();
+        $events = Event::factory(15)->create();
+        
+        foreach ($events as $event) {
+            $tasks = Task::factory(random_int(1, 3))->create([
+                'event_id' => $event->id, 
+            ]);
 
-        Event::factory(15)->create();
-        Task::factory(50)->create();
-        Guest::factory(30)->create();
+            
+            $guests = Guest::factory(random_int(1, 5))->create([
+                'event_id' => $event->id, 
+            ]);
 
-        foreach (Task::get() as $task) {
-            $guests = Guest::inRandomOrder()->take(random_int(0, 4))->get(); //takes from 0 to 4 guests to assign
-            $task->guests()->attach($guests);
+            Guest::factory()->create([
+                'event_id' => $event->id, 
+                'user_id' => $event->created_by
+            ]);
+    
+            foreach ($tasks as $task) {
+                $taskGuests = $guests->random(random_int(0, $guests->count()))->pluck('id');
+                $task->guests()->attach($taskGuests);
+            }
         }
 
     }

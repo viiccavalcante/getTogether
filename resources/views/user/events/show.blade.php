@@ -6,7 +6,7 @@
     <div class="rounded-lg border border-gray-200 bg-white shadow-lg p-6 transition-shadow hover:shadow-xl">
         <div class="flex items-center justify-between space-x-4">
             <div class="flex items-center space-x-4">
-                <h3 class="font-bold text-2xl text-[#381841]">{{ $event->name }}</h3>
+                <h3 class="font-bold text-2xl text-[#381841] max-w-md">{{ $event->name }}</h3>
                 <h1 class="font-bold text-xl text-orange-500">({{ $event->event_date->format('M-d-y') }})</h1>
             </div>
             <div class="flex space-x-4">

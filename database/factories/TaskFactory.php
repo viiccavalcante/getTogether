@@ -18,7 +18,7 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->sentence,
+            'name' => fake()->sentence(5),
             'description' => fake()->realText(180),
             'status' => fake()->randomElement(array_column(TaskStatus::cases(), 'value')),
             'expenses' => fake()->optional()->randomFloat(2, 5, 100),

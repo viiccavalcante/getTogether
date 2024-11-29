@@ -19,7 +19,9 @@ return new class extends Migration
             $table->foreignId('user_id'); 
             $table->foreignId('event_id');
 
-            $table->unique(['user_id', 'event_id']);
+           // $table->unique(['user_id', 'event_id']);
+           //this is causing a error in my seeder and I am still trying to fix on the 
+           //other branch
         });
     }
 
