@@ -51,9 +51,9 @@ class EventController extends Controller
             'created_by' => auth()->user()->id,
         ]);
 
-        if($request->guests){
+       
             $this->SaveEventGuests($request->guests, $event->id, auth()->user()->id);
-        }
+        
 
         session()->flash('success', 'Event [<span class="font-bold">'.$event->name.'</span>] created successfully');
 
@@ -132,9 +132,14 @@ class EventController extends Controller
         return redirect()->route('user.events.index');
     }
 
-    private function SaveEventGuests(array $newGuests,int $eventId, string $creator_id):void 
+    private function SaveEventGuests(?array $newGuests,int $eventId, string $creator_id):void 
     {
-        array_push($newGuests, $creator_id);
+        if($newGuests){
+            array_push($newGuests, $creator_id);
+        }else{
+            $newGuests[] = $creator_id;
+        }
+        
         foreach ($newGuests as $userId) {
             Guest::create([
                 'event_id' => $eventId,
