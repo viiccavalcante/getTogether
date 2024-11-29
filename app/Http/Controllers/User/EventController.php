@@ -20,8 +20,9 @@ class EventController extends Controller
                         })
                         ->orderBy('event_date', 'asc')
                         ->paginate(10);
+        $user = auth()->user();
 
-        return view('user.events.index', compact('events'));
+        return view('user.events.index', compact('events', 'user'));
     }
 
     public function create()
@@ -66,9 +67,10 @@ class EventController extends Controller
         $event = Event::findOrFail($eventId);
         $event->authorized(auth()->user(), false);
 
+        $user = auth()->user();
         //$tasks = Task::findOrFail($event_id);
         
-        return view('user.events.show', compact('event'));
+        return view('user.events.show', compact('event', 'user'));
     }
 
     public function edit(int $eventId)
@@ -92,7 +94,7 @@ class EventController extends Controller
             'location' => ['required', 'string', 'min:5', 'max:255'],
             'description' => ['required', 'string', 'max:500'],
             'event_date' => ['required', 'date', 'after_or_equal:today'],
-            'guests' => ['nullable', 'array'],
+           // 'guests' => ['nullable', 'array'],
         ]);
 
         $event = Event::find($eventId);
@@ -105,10 +107,10 @@ class EventController extends Controller
             'event_date' => $request->event_date,
         ]);
 
-        if($request->guests){
-            $this->DeleteEventGuests($event->guests->pluck('id'));
-            $this->SaveEventGuests($request->guests, $event->id, $event->created_by);
-        }
+        // if($request->guests){
+        //     $this->DeleteEventGuests($event->guests->pluck('id'));
+        //     $this->SaveEventGuests($request->guests, $event->id, $event->created_by);
+        // }
         
 
         session()->flash('success', 'Event [<span class="font-bold">'.$event->name.'</span>] updated successfully');
@@ -158,6 +160,11 @@ class EventController extends Controller
                 if ($guest->tasks()->exists()) {
                     foreach ($guest->tasks as $task) {
                         $task->update(['status' => TaskStatus::Created]);
+                        //talvez savar quem tem task e associar de novo
+                        //ou se tem task no evento, n pode editar os guests
+                        // ou só comento o campo do update por hora
+                        //ou compado o selected com os que vieram do request e só mando salvar/deletar os de ids diferentes
+                        
                     }
                     
                     $guest->tasks()->detach();

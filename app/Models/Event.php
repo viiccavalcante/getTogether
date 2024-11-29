@@ -43,4 +43,9 @@ class Event extends Model
 
         abort(401);
     }
+
+    public function isCreator(User $user): bool
+    {
+        return ($this->created_by == $user->id);
+    }
 }

@@ -13,8 +13,10 @@
                 <a class="text-sm font-bold text-white bg-[#FB923C] hover:bg-[#FB923C] focus:outline-none py-2 px-6 rounded-md shadow-md transition-all uppercase" href="{{ route('user.events.tasks.create', $event) }}">
                     Create Task
                 </a>
-                <x-primary-hiperlink href="{{ route('user.events.edit', $event) }}" action="Edit Event"/>
-            </div>
+                @if($event->isCreator($user))
+                    <x-primary-hiperlink href="{{ route('user.events.edit', $event) }}" action="Edit Event"/>
+                @endif
+                </div>
         </div>
 
         <div class="text-m text-gray-500 mb-1 ">

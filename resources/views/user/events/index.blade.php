@@ -31,11 +31,13 @@
                 class="text-sm text-white bg-[#8e4b71] hover:bg-[#502d55] px-2 py-0.5 rounded-md font-semibold transition-colors uppercase">
                     Details
                 </a>
-                <form action="{{route('user.events.destroy', $event)}}" method="post" class="inline-block">
-                    @method('delete')
-                    @csrf
-                    <x-delete-button></x-delete-button>
-                </form>
+               @if($event->isCreator($user))
+                    <form action="{{route('user.events.destroy', $event)}}" method="post" class="inline-block">
+                        @method('delete')
+                        @csrf
+                        <x-delete-button></x-delete-button>
+                    </form>
+                @endif
             </div>
         </div>
     @endforeach
