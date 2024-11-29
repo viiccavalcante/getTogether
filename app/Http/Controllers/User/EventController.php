@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Enums\TaskStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Guest;
@@ -112,7 +113,7 @@ class EventController extends Controller
 
         session()->flash('success', 'Event [<span class="font-bold">'.$event->name.'</span>] updated successfully');
 
-        return redirect()->route('user.events.index');
+        return redirect()->route('user.events.show', $event);
     }
 
     public function destroy(int $eventId)
@@ -124,7 +125,7 @@ class EventController extends Controller
             $this->DeleteEventGuests($event->guests->pluck('id'));
         }
 
-        $event->tasks()->delete();//achoq ue precisa deletar da tabela de task tb
+        $event->tasks()->delete();
         $event->delete();
 
         session()->flash('success', 'Event [<span class="font-bold">'.$event->name.'</span>] deleted successfully');
@@ -150,6 +151,21 @@ class EventController extends Controller
 
     private function DeleteEventGuests($previousGuests):void 
     {
+        foreach ($previousGuests as $guestId){
+            $guest = Guest::find($guestId);
+
+            if ($guest) {
+                if ($guest->tasks()->exists()) {
+                    foreach ($guest->tasks as $task) {
+                        $task->update(['status' => TaskStatus::Created]);
+                    }
+                    
+                    $guest->tasks()->detach();
+                }
+            }
+            
+        } 
+
         Guest::whereIn('id', $previousGuests)->delete();
     }
 
