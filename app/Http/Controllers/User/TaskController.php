@@ -13,11 +13,11 @@ class TaskController extends Controller
     public function create(int $id, Request $request)
     {
         $event = \App\Models\Event::findOrFail($id);
-        $event->load('guests');
+        $event->load('participants');
         $event->authorized(auth()->user(), false);
 
-        $eventGuests = User::getAllFromGuests($event->id)->get()->pluck('name', 'id')->toArray();
-        return view('user.events.tasks.create', compact('event', 'eventGuests'));
+        $eventParticipants = User::getAllParticipants($event->id)->get()->pluck('name', 'id')->toArray();
+        return view('user.events.tasks.create', compact('event', 'eventParticipants'));
     }
     
     public function store(int $id, Request $request)
@@ -34,12 +34,12 @@ class TaskController extends Controller
         $task = Task::create([
             'name' => $request->name,
             'description' => $request->description,
-            'status' => ($request->guests) ? TaskStatus::Assigned : TaskStatus::Created,
+            'status' => ($request->participants) ? TaskStatus::Assigned : TaskStatus::Created,
             'expenses' => $request->expenses,
             'event_id' => $event->id,
         ]);
 
-        $task->guests()->attach($request->guests);
+        $task->participants()->attach($request->participants);
         
         session()->flash('success', 'Task [<span class="font-bold">'.$event->name.'</span>] created successfully');
 
@@ -49,12 +49,12 @@ class TaskController extends Controller
     public function destroy(string $taskId)
     {
         $task = Task::findOrFail($taskId);
-        $task->load('guests', 'event');
+        $task->load('participants', 'event');
         $event = $task->event;
         $event->authorized(auth()->user(), false);
 
-        if($task->guests){
-            $task->guests()->detach();
+        if($task->participants){
+            $task->participants()->detach();
         }
 
         $task->delete();

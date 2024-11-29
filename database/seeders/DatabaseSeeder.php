@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Event;
 use App\Models\Task;
-use App\Models\Guest;
+use App\Models\Participant;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -24,15 +24,26 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory(10)->create();
-
         Event::factory(15)->create();
-        Task::factory(50)->create();
-        Guest::factory(30)->create();
 
-        foreach (Task::get() as $task) {
-            $guests = Guest::inRandomOrder()->take(random_int(0, 4))->get(); //takes from 0 to 4 guests to assign
-            $task->guests()->attach($guests);
+        foreach (Event::get() as $event) {
+            $users = User::inRandomOrder()->take(random_int(0, 4))->get()->unique('id');
+            $event->participants()->attach($users);
         }
 
+        Task::factory(50)->create();
+        //Participant::factory(30)->create();
+
+        // foreach (Task::get() as $task) {
+        //     $participants = Participant::inRandomOrder()->take(random_int(0, 4))->get();
+        
+        //     $participantIds = $participants->pluck('id')->toArray();
+        //     \Log::info('Attaching participants: ', $participantIds);
+        
+        //     if (count($participantIds) > 0) {
+        //         $task->participants()->attach($participantIds);
+        //     }
+        // }
+        
     }
 }

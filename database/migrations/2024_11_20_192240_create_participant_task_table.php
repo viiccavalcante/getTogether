@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('guest_task', function (Blueprint $table) {
+        Schema::create('participant_task', function (Blueprint $table) {
             $table->timestamps();
 
-            $table->foreignId('guest_id');
+            $table->foreignId('participant_id');
             $table->foreignId('task_id');
 
-            $table->unique(['guest_id', 'task_id']);
+            $table->unique(['participant_id', 'task_id']);
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('guest_task');
+        Schema::dropIfExists('participant_task');
     }
 };

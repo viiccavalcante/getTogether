@@ -22,8 +22,8 @@ class Task extends Model
         return $this->belongsTo(Event::class, 'event_id');
     }
 
-    public function guests()
+    public function participants()
     {
-        return $this->belongsToMany(Guest::class, 'guest_task');
+        return $this->belongsToMany(Participant::class, 'participant_task', 'task_id', 'participant_id');
     }
 }

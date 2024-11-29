@@ -26,9 +26,10 @@ class Event extends Model
         return $this->hasMany(Task::class, 'event_id');
     }
 
-    public function guests()
+    public function participants()
     {
-        return $this->hasMany(Guest::class, 'event_id');
+        return $this->belongsToMany(User::class, 'participants', 'event_id', 'user_id')
+                ->using(Participant::class);
     }
 
     public function authorized(User $user, bool $creatorOnly): void
@@ -37,7 +38,7 @@ class Event extends Model
             return;
         }
 
-        if(!$creatorOnly && (in_array($user->id, $this->guests()->pluck('user_id')->toArray()))) {
+        if(!$creatorOnly && (in_array($user->id, $this->participants()->pluck('user_id')->toArray()))) {
             return;
         }
 

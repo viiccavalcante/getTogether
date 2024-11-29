@@ -3,14 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Guest extends Model
+class Participant extends Pivot
 {
-    /** @use HasFactory<\Database\Factories\GuestFactory> */
+    /** @use HasFactory<\Database\Factories\ParticipantFactory> */
     use HasFactory;
 
     protected $guarded = [];
+    protected $table = 'participants';
 
     public function event()
     {
@@ -24,6 +25,6 @@ class Guest extends Model
 
     public function tasks()
     {
-        return $this->belongsToMany(Task::class, 'guest_task');
+        return $this->belongsToMany(Task::class, 'participant_task', 'task_id', 'participant_id');
     }
 }

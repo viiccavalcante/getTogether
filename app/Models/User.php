@@ -51,9 +51,10 @@ class User extends Authenticatable
         return $this->hasMany(Event::class, 'created_by');
     }
 
-    public function guests()
+    public function participants()
     {
-        return $this->hasMany(Guest::class, 'user_id');
+        return $this->belongsToMany(Event::class, 'participants', 'user_id', 'event_id')
+                    ->using(Participant::class);
     }
 
     // Model scopes --------
@@ -65,11 +66,11 @@ class User extends Authenticatable
     }
 
        // Model scopes --------
-    public function scopeGetAllFromGuests($query, $eventId)
+    public function scopeGetAllParticipants($query, $eventId)
     {
-        return $query->select('guests.id', 'users.name')
-                     ->join('guests', 'users.id', '=', 'guests.user_id')
-                     ->where('guests.event_id', $eventId)
+        return $query->select('participants.id', 'users.name')
+                     ->join('participants', 'users.id', '=', 'participants.user_id')
+                     ->where('participants.event_id', $eventId)
                      ->orderBy('name', 'asc');
     }
 }

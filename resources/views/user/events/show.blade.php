@@ -30,9 +30,11 @@
         <div class="font-medium text-gray-800 mt-4">
             <span class="font-semibold text-lg text-gray-900">Participants</span>
             <div class="flex flex-wrap gap-2 mt-2">
-                @foreach($event->guests as $guest)
+            @dd($event->participants) 
+                @foreach($event->participants as $participant)
                     <div class="inline-flex items-center space-x-2 text-gray-700 bg-[#c598af] hover:bg-purple-200 text-white px-3 py-1 rounded-full cursor-pointer transition-all">
-                        <span>{{ $guest->user->name }}</span>
+                    @dd($participant)    
+                    <span>{{ $participant->user->name }}</span>
                     </div>
                 @endforeach
             </div>
@@ -49,9 +51,9 @@
                                 <div class= "flex items-center space-x-4 max-w-4xl">
                                     <span class="font-semibold text-lg text-gray-800">{{ $task->name }}</span>
                                     <div>
-                                        @foreach($task->guests as $guestAssigned)
+                                        @foreach($task->participants as $participantAssigned)
                                             <div class="inline-flex items-center space-x-1 text-[#381841] bg-purple-200 text-sm px-2 py-0.5 rounded-full transition-all">
-                                                <span>{{ $guestAssigned->user->name }}</span>
+                                                <span>{{ $participantAssigned->user->name }}</span>
                                             </div>
                                         @endforeach
                                     </div>
