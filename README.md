@@ -1,5 +1,5 @@
 <b> Get Together</b><br>
-is an application to help people organize small events like family BBQs and surprise birthday party.
+I created Get Together as my final project for the Modern Web Application 1 subject during my master's studies in Computer Science. It is an application to help people organize small events like family BBQs and surprise birthday party.
 
 
 Installation process <br>
