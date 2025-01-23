@@ -13,6 +13,7 @@ class EventController extends Controller
 {
     public function index()
     {
+        teste();
         $events = Event::where('created_by', auth()->user()->id)
                         ->where('event_date', '>=', today())
                         ->orWhereHas('guests', function ($query) {
