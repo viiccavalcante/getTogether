@@ -214,8 +214,8 @@ return [
             'to' => 'victoriapcavalcante@gmail.com',
 
             'from' => [
-                'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-                'name' => env('MAIL_FROM_NAME', 'Example'),
+                'address' => env('MAIL_FROM_ADDRESS', 'noreply@victoriacavalcante.online'),
+                'name' => env('MAIL_FROM_NAME', 'Backup Notifications'),
             ],
         ],
 
