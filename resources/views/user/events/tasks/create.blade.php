@@ -3,7 +3,7 @@
         @csrf
 
         <x-form-text name="name" label="Name" placeholder="Name" />
-        <x-form-textarea name="description" label="Describe it" placeholder="Describe your task"/>
+        <x-form-text-area name="description" label="Describe it" placeholder="Describe your task"/>
         <x-form-text name="expenses" label="expenses" placeholder="How much will it costs?" />
         <x-form-multi-select name="guests" label="Assigned to" :options="$eventGuests" />
 
