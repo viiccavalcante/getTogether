@@ -12,6 +12,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "spatie/laravel-backup": "^9.2",
         "spatie/laravel-flare": "^1.1",
+        "symfony/http-client": "^7.2",
         "symfony/postmark-mailer": "^7.2"
     },
     "require-dev": {
