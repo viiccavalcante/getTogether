@@ -88,8 +88,6 @@ class EventController extends Controller
 
     public function update(Request $request, int $eventId)
     {
-
-        dd($request);
         $request->validate([
             'name' => ['required', 'string', 'min:5', 'max:255'],
             'location' => ['required', 'string', 'min:5', 'max:255'],
