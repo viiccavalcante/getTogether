@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Http\Resources\EventIndexResource;
 use App\Http\Resources\EventShowResource;
+use App\Http\Resources\TasksResource;
 use Illuminate\Http\Request;
 
 class EventController extends Controller

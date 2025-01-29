@@ -14,7 +14,10 @@ class EventShowResource extends JsonResource
             'name' => $this->name,
             'date' => $this->event_date?->format('d-m-Y'),
             'location' => $this->location,
-            'creator' => new CreatorResource($this->creator),
+            'description' => $this->description,
+            'created_by' => new CreatorResource($this->creator),
+            'participants' => $this->guests->pluck('user.name'),
+            'tasks' => TasksResource::collection($this->tasks),
         ];
     }
 }

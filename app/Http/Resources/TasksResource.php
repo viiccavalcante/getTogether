@@ -5,16 +5,17 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class EventIndexResource extends JsonResource
+class TasksResource extends JsonResource
 {
+   
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
             'name' => $this->name,
-            'location' => $this->location,
-            'date' => $this->event_date->format('d-m-Y'),
-            'creator' => new CreatorResource($this->creator),
+            'status' => $this->status,
+            'description' => $this->description,
+            'expenses' => $this->expenses,
+            'assigned_to' => $this->guests->pluck('user.name'),
         ];
     }
 }
