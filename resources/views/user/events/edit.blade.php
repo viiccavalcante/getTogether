@@ -4,7 +4,6 @@
         @csrf
         
         <x-form-text name="name" label="Name" value="{{$event->name}}"/>
-        <x-form-text name="location" label="Where?" value="{{$event->location}}"/> 
         <x-form-calendar name="event_date" label="When?" type="date" class="calendar-input" value="{{$event->event_date->format('Y-m-d')}}"/>
         <!--x-form-multi-select name="guests" label="Who is coming?" :options="$guests" :selectedOptions="$selectedGuests"/-->
         <x-form-textarea name="description" label="Describe it" placeholder="Describe your event" value="{{$event->description}}"/>

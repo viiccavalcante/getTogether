@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full @if($valentine) bg-pink-200 @else bg-gray-100 @endif">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-gray-100">
 
 <head>
     <meta charset="utf-8">
@@ -14,7 +14,10 @@
 
     <!-- Styles / Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
-
+    @if($include_alpine)
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @endif
+    @livewireStyles()
 </head>
 <body class="font-sans antialiased h-full">
 <!--
@@ -43,7 +46,7 @@ This example requires updating your template:
     <x-site-layout-footer />
 </div>
 
-
+@livewireScripts()
 
 </body>
 </>

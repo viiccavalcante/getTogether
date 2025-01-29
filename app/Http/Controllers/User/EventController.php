@@ -54,8 +54,7 @@ class EventController extends Controller
         ]);
 
        
-            $this->SaveEventGuests($request->guests, $event->id, auth()->user()->id);
-        
+        $this->SaveEventGuests($request->guests, $event->id, auth()->user()->id);
 
         session()->flash('success', 'Event [<span class="font-bold">'.$event->name.'</span>] created successfully');
 
@@ -89,6 +88,8 @@ class EventController extends Controller
 
     public function update(Request $request, int $eventId)
     {
+
+        dd($request);
         $request->validate([
             'name' => ['required', 'string', 'min:5', 'max:255'],
             'location' => ['required', 'string', 'min:5', 'max:255'],

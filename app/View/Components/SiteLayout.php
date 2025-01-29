@@ -9,13 +9,12 @@ use Illuminate\View\Component;
 class SiteLayout extends Component
 {
     public $title;
+    public $include_alpine;
 
-    public $valentine;
-
-    public function __construct(?string $title = null)
+    public function __construct(?string $title = null, ?bool $noalpine = false)
     {
         $this->title = ucfirst($title);
-        $this->valentine = $this->isValentineDayToday();
+        $this->include_alpine = ! $noalpine;
     }
 
     /**
@@ -26,8 +25,4 @@ class SiteLayout extends Component
         return view('layouts.site.layout');
     }
 
-    private function isValentineDayToday(): bool
-    {
-        return today()->month == '2' && today()->day == '14';
-    }
 }

@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'google' => [
+        'maps' => [
+            'apiMaps' => [
+                'endpoint' => 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
+                'key' => env('GOOGLE_MAPS_API_KEY', ''),
+            ],
+        ],
+    ],
+
 ];
