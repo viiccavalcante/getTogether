@@ -74,7 +74,6 @@ class EventController extends Controller
 
     public function edit(int $eventId)
     {
-        teste();
         $event = Event::findOrFail($eventId);
         $event->authorized(auth()->user(), true);
 
