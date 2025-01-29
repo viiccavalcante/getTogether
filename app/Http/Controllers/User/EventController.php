@@ -90,7 +90,6 @@ class EventController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'min:5', 'max:255'],
-            'location' => ['required', 'string', 'min:5', 'max:255'],
             'description' => ['required', 'string', 'max:500'],
             'event_date' => ['required', 'date', 'after_or_equal:today'],
            // 'guests' => ['nullable', 'array'],
@@ -101,7 +100,6 @@ class EventController extends Controller
 
         $event->update([
             'name' => $request->name,
-            'location' => $request->location,
             'description' => $request->description,
             'event_date' => $request->event_date,
         ]);
